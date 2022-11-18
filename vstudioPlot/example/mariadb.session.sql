@@ -1,19 +1,17 @@
 -- Active: 1668522799726@@127.0.0.1@33060@fence
 BEGIN
     DECLARE centralId INT;
-    -- DECLARE centralName VARCHAR;
+    DECLARE centralName VARCHAR;
     DECLARE centralTypeId INT;
     DECLARE messageTypeId INT;
     DECLARE meesageDate DATETIME;
-    /*DECLARE moduleName VARCHAR(45);
+    DECLARE moduleName VARCHAR(45);
     DECLARE moduleId INT;
     DECLARE power DECIMAL(5,2);
     DECLARE voltage DECIMAL(5,2);
     DECLARE amperage DECIMAL(5,2);
-    DECLARE messageTxt VARCHAR(45);*/
+    DECLARE messageTxt VARCHAR(45);
 
-    select * from central;
-/*
     centralId = get_int();
     centralName = get_string(45);
     centralTypeId = FLOOR(1 + RAND() * 2);
@@ -28,7 +26,7 @@ BEGIN
 
 
     call populate_message(centralId, centralName, centralTypeId, messageTypeId, meesageDate, moduleId, moduleName, power, voltage, amperage, messageTxt);
-    */
+
 END
 
 /* dane mock do testów b.d.

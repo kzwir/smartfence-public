@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 33060,
+            "driver": "MariaDB",
+            "name": "mariadb",
+            "database": "fence",
+            "username": "admin",
+            "password": "Fe8n!3ce#123"
+        }
+    ]
+}

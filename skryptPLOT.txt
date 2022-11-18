@@ -1,0 +1,4 @@
+docker network create -d bridge mysql-net
+
+// uruchomienie pliku yaml
+docker-compose up -d

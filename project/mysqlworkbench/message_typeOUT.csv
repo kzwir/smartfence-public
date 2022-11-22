@@ -1,0 +1,9 @@
+id,name
+2,"komunikat o wejściu na teren brelokiem RFID"
+3,"komunikat o wejściu na teren po rozpoznaniu twarzy"
+4,"rozbrojenie alarmu"
+5,"uzbrojenie alarmu"
+6,"utrata energii - przejście na zasilanie bateryjne"
+7,"uruchomienie urządzenia  "
+8,"włamanie "
+1,photovoltaics

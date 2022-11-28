@@ -17,11 +17,11 @@ USE `fence` ;
 -- -----------------------------------------------------
 -- Table `fence`.`central`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `fence`.`central` ;
 CREATE TABLE IF NOT EXISTS `fence`.`central` (
-  `id` INT NOT NULL,
-  `id_central` INT NOT NULL,
+  `id_central` VARCHAR(17) NOT NULL,
   `name_central` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`name_central`, `id_central`))
 ENGINE = InnoDB;
 
 
@@ -38,22 +38,24 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `fence`.`message`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `fence`.`message` ;
 CREATE TABLE IF NOT EXISTS `fence`.`message` (
   `id_message` INT NOT NULL,
   `date` DATETIME NOT NULL,
-  `central_id` INT NOT NULL,
   `message_type_id` ENUM('1', 'A', 'B', 'C', 'D', 'E', 'F', 'G') NOT NULL,
-  PRIMARY KEY (`id_message`, `central_id`, `message_type_id`),
-  INDEX `fk_message_central_idx` (`central_id` ASC),
+  `name_central` VARCHAR(100) NOT NULL,
+  `id_central` VARCHAR(17) NOT NULL,
+  PRIMARY KEY (`id_message`, `message_type_id`, `name_central`, `id_central`),
   INDEX `fk_message_message_type_idx` (`message_type_id` ASC),
-  CONSTRAINT `fk_message_central`
-    FOREIGN KEY (`central_id`)
-    REFERENCES `fence`.`central` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `fk_message_central1_idx` (`name_central` ASC, `id_central` ASC),
   CONSTRAINT `fk_message_message_type`
     FOREIGN KEY (`message_type_id`)
     REFERENCES `fence`.`message_type` (`id_message_type`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_message_central1`
+    FOREIGN KEY (`name_central` , `id_central`)
+    REFERENCES `fence`.`central` (`name_central` , `id_central`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -111,13 +113,6 @@ CREATE TABLE IF NOT EXISTS `fence`.`enter` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-
-ALTER TABLE `central` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `enter` CHANGE `id_enter` `id_enter` INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `message` CHANGE `id_message` `id_message` INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `modul` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `photovoltaics` CHANGE `id_photovoltaics` `id_photovoltaics` INT(11) NOT NULL AUTO_INCREMENT;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

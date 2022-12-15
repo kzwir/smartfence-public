@@ -1,17 +1,18 @@
 <?php
-/**
- 
- Krzysztof Żwirek
- Obsługa bazy danych MySQL
- 2022.11.18
+/********************************************************************************************/
+/* Krzysztof Żwirek                                                                         */
+/*  Obsługa bazy danych MySQL                                                               */
+/*  2022.11.18                                                                              */
+/********************************************************************************************/
 
-*/
-class DbLayer {
+require_once( 'config.php' );
 
+class DbLayer extends DatabaseSettings
+{
     // flaga połączenia z bazą,
     // jeśli true — mamy połączenie
     // jeśli false — nie mamy połączenia
-    private $connected = null;
+    private $connected = false;
 
     private $db_conn = null;
 
@@ -29,27 +30,17 @@ class DbLayer {
             return;
         } else {
             // nie, więc łączymy do SQL…
-            $db_conn = new PDO("mysql:host={self::DB_HOST};dbname={self::DB_NAME}", self::DB_USER, self::DB_PASS, array(PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES utf8", PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-/*
-            if(!@mysql_connect(self::DB_HOST, self::DB_USER, self::DB_PASS)) {
-                throw new Exception('Błąd — brak dostępu do SQL.');
-                return false;
-            }
-
-            // wybieramy bazę danych…
-            if(!@mysql_select_db(self::DB_NAME)) {
-                throw new Exception(‚Błąd — brak połączenia z bazą danych.’);
-                return false;
-            } else {
-                // wybieramy kodowanie znaków UTF-8
-                // to zapewnia obsługę polskich znaków w operacjach
-                // skrypt — SQL.
-                @mysql_query("SET NAMES 'utf8'");
-                return true;
-
-                // ustawiamy flagę na true
+            try {
+                // Load settings from parent class
+                $settings = DatabaseSettings::getSettings();
+                $db_conn = new PDO('mysql:host='.$settings['dbhost'].';dbname='.$settings['dbname'].'', $settings['dbusername'], $settings['dbpassword']);
+                $db_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->connected = true;
-            }*/
+            }
+            catch (PDOException $e) {
+                print "Błąd w trakcie łączenia z b.d.: " . $e->getMessage() . "<br/>";
+                die();
+            }
         }
     }
 
@@ -114,6 +105,54 @@ class DbLayer {
         
         $data = $dzien.' '.$miesiac.' '.$rok.' o godz. '.$godzina.':'.$minuta;
         return $data;
+    }
+
+    /**
+    * Funkcja wstawia dane do bazy danych fence dane z komunikatu 1
+    *
+    * @param string $query
+    * @param string $centralName
+    * @param int $centralId
+    * @param int $messageTypeId
+    * @param datetime $meesageDate
+    * @param string $moduleName
+    * @param int $moduleId
+    * @param decimal $power
+    * @param decimal $voltage
+    * @param decimal $amperage
+    * @return bool
+    */
+    public function update_proc_db($centralName, $centralId, $messageTypeId, $meesageDate, $moduleName, $moduleId, $power, $voltage, $amperage, $messageTxt) {
+        if(!$this->connected)
+            $this->conn();
+        try {
+            // calling stored procedure command
+            $sql = 'CALL fence.populate_message(:p_centralId, :p_centralName, :p_messageTypeId, :p_messageDate, :p_moduleName, :p_moduleId, :p_power, :p_voltage, :p_amperage, :p_messageTxt';
+
+            // prepare for execution of the stored procedure
+            $stmt = $pdo->prepare($sql);
+
+            // pass value to the command
+            $stmt->bindParam(':p_centralId', $centralId, PDO::PARAM_INT);
+            $stmt->bindParam(':p_centralName', $centralName, PDO::PARAM_INT);
+            $stmt->bindParam(':p_messageTypeId', $messageTypeId, PDO::PARAM_INT);
+            $stmt->bindParam(':p_messageDate', $meesageDate, PDO::PARAM_INT);
+            $stmt->bindParam(':p_moduleName', $moduleName, PDO::PARAM_INT);
+            $stmt->bindParam(':p_moduleId', $moduleId, PDO::PARAM_INT);
+            $stmt->bindParam(':p_power', $power, PDO::PARAM_INT);
+            $stmt->bindParam(':p_voltage', $voltage, PDO::PARAM_INT);
+            $stmt->bindParam(':p_amperage', $amperage, PDO::PARAM_INT);
+            $stmt->bindParam(':p_messageTxt', $messageTxt, PDO::PARAM_INT);
+
+            // execute the stored procedure
+            $stmt->execute();
+
+            $stmt->closeCursor();
+        }
+        catch (PDOException $e) {
+            print "Błąd update_proc_db: " . $e->getMessage() . "<br/>";
+            die();
+        }
     }
 
     /**

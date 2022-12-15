@@ -34,13 +34,22 @@ $api_key= $sensor = $location = $value1 = $value2 = $value3 = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$api_key = test_input($_POST["api_key"]);
 	if($api_key == $api_key_value) {
-		$db = new DbLayer();
-
 		$centralId = test_input($_POST["centralisd"]);
 		$centralName = test_input($_POST["centralname"]);
 		$messageTypeId = test_input($_POST["meesagetypeid"]);
 		$meesageDate = test_input($_POST["messagedate"]);
+		$moduleName = test_input($_POST["modulename"]);
+		$moduleId = test_input($_POST["moduleid"]);
+		$power = test_input($_POST["power"]);
+		$voltage = test_input($_POST["voltage"]);
+		$amperage = test_input($_POST["amperage"]);
+		$messageTxt = = test_input($_POST["messagetxt"]);
 
+		echo $centralName . '; ' . $centralId . '; '. $messageTypeId . '; ' . $meesageDate . '; ' . $moduleName . '; ' . $moduleId . '; ' . $power . '; ' . $voltage . '; ' . $amperage . '; ' . $messageTxt . '</br>';
+		$db = new DbLayer();
+		$db->update_proc_db($centralName, $centralId, $messageTypeId, $meesageDate, $moduleName, $moduleId, $power, $voltage, $amperage, $messageTxt);
+
+/*
 		switch($messageTypeId) {
 			case '1': 
 				$moduleName = test_input($_POST["modulename"]);
@@ -69,6 +78,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				$moduleId = test_input($_POST["moduleid"]);
 				$db->update_db($centralName, $centralId, $messageTypeId, $meesageDate, $moduleName, $moduleId);
 		}
+*/
+
+		$db = null;
 	}
 }
 else {

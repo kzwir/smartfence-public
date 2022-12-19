@@ -1,0 +1,22 @@
+/*
+przenoszenie obrazów z docker desktop jednego host'a na drugi
+push to docker hub
+*/
+-- 1. logowanie do konta dockera
+docker login -u mmakzwi
+
+--2. nadanie znacznika dla tego co ma być wysłane
+--         nazwa image:aktualny tag konto/repozytorium:tag w repozytorium
+docker tag mariadb:10.4.8-bionic mmakzwi/plot:mariadb
+docker tag phpmyadmin/phpmyadmin:latest mmakzwi/plot:phpmyadmin
+docker tag php/php:8.0-apache, mmakzwi/plot:php:8.0-apache
+
+-- 3. wysłanie do dockerhub
+--          konto/nazwa repozytorium:nadany wcześniej tag w repozytorium
+docker push mmakzwi/plot:mariadb
+docker push mmakzwi/plot:phpmyadmin
+docker push mmakzwi/plot:php:8.0-apache
+
+
+
+

@@ -1,0 +1,12 @@
+nginx:
+    image: nginx
+    volumes:
+      - ./templates:/etc/nginx/templates
+      - /D/temp/plot/templates/html:/usr/share/nginx/html/
+    networks:
+      - fencebridge
+    ports:
+      - "8080:80"
+    environment:
+     - NGINX_HOST=index.html
+     - NGINX_PORT=80

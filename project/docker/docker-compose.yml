@@ -1,0 +1,63 @@
+version: "3.7"
+
+networks:
+  fencebridge:
+
+volumes:
+  mariadb_data:
+  phpmyadmin_data:
+
+services:
+
+  mariadb:
+    image: mariadb:10.4.8-bionic
+    environment:
+      MYSQL_DATABASE: fence
+      MYSQL_ROOT_PASSWORD: Fe8n!3ce#123
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: Fe8n!3ce#123
+    volumes:
+      - mariadb_data:/var/lib/mysql/
+    networks:
+      - fencebridge
+    ports:
+      - 33060:3306
+      
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mariadb
+      UPLOAD_LIMIT: 300M
+    restart: always
+    ports:
+      - 8081:80
+    volumes:
+      - phpmyadmin_data:/var/www/html/
+    networks:
+      - fencebridge
+    depends_on:
+      - mariadb
+
+  php-apache-environment:
+    container_name: php-apache
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    image: php:8.0-apache
+    volumes:
+      #- ./php/src:wslpath -a 'D:\Users\sprawka\enovio\plot\smartfence\project\php'
+      # - ./php/src:/var/www/html/
+      #- D/Users/sprawka/enovio/plot/smartfence/project/php:/var/www/html/
+      #- /D/temp/plot/templates/html:/var/www/html/
+      - D:\Projects\plot\smartfence\project\php:/var/www/html/
+    networks:
+      - fencebridge
+    ports:
+      - 8000:80
+    depends_on:
+      - mariadb
+# na koniec uruchomić w celu interakcji php i mariadb:
+# docker-php-ext-install mysqli  
+# docker-php-ext-enable mysqli

@@ -32,10 +32,6 @@ include "dblayer.php";
 $api_key= $sensor = $location = $value1 = $value2 = $value3 = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if($api_key == $api_key_value) {
-		echo "Data posted with HTTP POST. :)";
-		
-/*if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$api_key = test_input($_POST["api_key"]);
 	if($api_key == $api_key_value) {
 		$centralId = test_input($_POST["centralisd"]);
@@ -47,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$power = test_input($_POST["power"]);
 		$voltage = test_input($_POST["voltage"]);
 		$amperage = test_input($_POST["amperage"]);
-		$messageTxt = test_input($_POST["messagetxt"]);
+		$messageTxt = = test_input($_POST["messagetxt"]);
 
 		$db = new DbLayer();
 		$db->update_msg($centralName, $centralId, $messageTypeId, $meesageDate, $moduleName, $moduleId, $power, $voltage, $amperage, $messageTxt);
@@ -85,10 +81,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 		$db = null;
 	}
-	else {
-		echo "Wrong API Key provided.";
-	}
 }
+else {
+	echo "Wrong API Key provided.";
+}
+
 else {
     echo "No data posted with HTTP POST.";
 }

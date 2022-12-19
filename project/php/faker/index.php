@@ -1,5 +1,6 @@
 <?php
 require_once 'vendor/autoload.php';
+require_once 'httprequest.php';
 ?>
 
 <!DOCTYPE html>
@@ -164,6 +165,11 @@ table, th, td {
 			}
 			// call populate_message($macAddressCentral, $nameCentral, $meesageType, $meesageDate, $nameModul, $macAddressModul, $power, $voltage, $amperage, $messageTxt);
 			echo $i+1 . ";     " . $macAddressCentral . "; " . $nameCentral . "; " .  $meesageType . "; " . $meesageDate . "; " . $nameModul . "; " . $macAddressModul . "; " . $power . "; " . $voltage . "; " . $amperage . "; " . $messageTxt . "<br>";
+
+			// sending http post message
+			$requestArr = array("centralisd" => $macAddressCentral, "centralname" => $nameCentral, "meesagetypeid" => $meesageType, "messagedate" => $meesageDate, "modulename" => $nameModul, "moduleid" => $macAddressModul, "power" => $power, "voltage" => $voltage, "amperage" => $amperage, "messagetxt" => $messageTxt);
+            $url        = "http://localhost/fence/fenceservice.php";
+            $this->assertEquals(HTTPRequester::HTTPPost($url, $requestArr), '[{"error":false}]');
 		}
 	?>	
 </body>

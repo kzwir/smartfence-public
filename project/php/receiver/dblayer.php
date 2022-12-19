@@ -108,7 +108,8 @@ class DbLayer extends DatabaseSettings
     }
 
     /**
-    * Funkcja wstawia dane do bazy danych fence dane z komunikatu 1
+    * Funkcja wstawia dane do bazy danych fence dane z komunikatu.
+    * Wywoływana jest procedura wbudowana, która na podstawie rodzaju wiadomości wstawia odpowiednie dane do tabel.
     *
     * @param string $query
     * @param string $centralName
@@ -120,9 +121,10 @@ class DbLayer extends DatabaseSettings
     * @param decimal $power
     * @param decimal $voltage
     * @param decimal $amperage
+    * @param string $messageTxt;
     * @return bool
     */
-    public function update_proc_db($centralName, $centralId, $messageTypeId, $meesageDate, $moduleName, $moduleId, $power, $voltage, $amperage, $messageTxt) {
+    public function update_msg($centralName, $centralId, $messageTypeId, $meesageDate, $moduleName, $moduleId, $power, $voltage, $amperage, $messageTxt) {
         if(!$this->connected)
             $this->conn();
         try {
@@ -191,6 +193,10 @@ class DbLayer extends DatabaseSettings
         }
     }
 
+
+
+/*
+
     public function update_db($centralName, $centralId, $messageTypeId, $meesageDate, $moduleName, $moduleId, $messageTxt ) {
         if(!$this->connected)
             $this->conn();
@@ -250,4 +256,6 @@ class DbLayer extends DatabaseSettings
             die();
         }
     }
+*/
 }
+

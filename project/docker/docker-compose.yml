@@ -47,10 +47,7 @@ services:
       dockerfile: Dockerfile
     image: php:8.0-apache
     volumes:
-      #- ./php/src:wslpath -a 'D:\Users\sprawka\enovio\plot\smartfence\project\php'
-      # - ./php/src:/var/www/html/
-      #- D/Users/sprawka/enovio/plot/smartfence/project/php:/var/www/html/
-      #- /D/temp/plot/templates/html:/var/www/html/
+    # ustawienie ścieżki w host, która jest widoczna w docker jako źródło www
       - D:\Projects\plot\smartfence\project\php:/var/www/html/
     networks:
       - fencebridge

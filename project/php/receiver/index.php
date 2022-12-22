@@ -31,26 +31,29 @@ include "dblayer.php";
 
 $api_key= $sensor = $location = $value1 = $value2 = $value3 = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if($api_key == $api_key_value) {
-		echo "Data posted with HTTP POST. :)";
-		
-/*if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$api_key = test_input($_POST["api_key"]);
-	if($api_key == $api_key_value) {
-		$centralId = test_input($_POST["centralisd"]);
-		$centralName = test_input($_POST["centralname"]);
-		$messageTypeId = test_input($_POST["meesagetypeid"]);
-		$meesageDate = test_input($_POST["messagedate"]);
-		$moduleName = test_input($_POST["modulename"]);
-		$moduleId = test_input($_POST["moduleid"]);
-		$power = test_input($_POST["power"]);
-		$voltage = test_input($_POST["voltage"]);
-		$amperage = test_input($_POST["amperage"]);
-		$messageTxt = test_input($_POST["messagetxt"]);
+http_response_code(500);
 
-		$db = new DbLayer();
-		$db->update_msg($centralName, $centralId, $messageTypeId, $meesageDate, $moduleName, $moduleId, $power, $voltage, $amperage, $messageTxt);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	$api_key = test_input($_POST["apikey"]);
+	if($api_key == $api_key_value) {
+		echo "Otrzymane dane: " . $centralId . "; " . $centralName . "; " . $messageTypeId . "; " . $meesageDate . "; " . $moduleName . "; " . $moduleId . "; " . $power . "; " . $voltage . "; " . $amperage . "; " . $messageTxt;
+		
+		$centralId = test_input($_POST["cid"]);
+		$centralName = test_input($_POST["cname"]);
+		$messageTypeId = test_input($_POST["msgtypeid"]);
+		$meesageDate = test_input($_POST["msgedate"]);
+		$moduleName = test_input($_POST["mname"]);
+		$moduleId = test_input($_POST["mid"]);
+		$power = test_input($_POST["p"]);
+		$voltage = test_input($_POST["v"]);
+		$amperage = test_input($_POST["a"]);
+		$messageTxt = test_input($_POST["msgtxt"]);
+
+		echo $centralId . '; ' . $centralName . '; ' . $messageTypeId . '; ' . $meesageDate . '; ' . $moduleName . '; ' . $moduleId . '; ' . $power . '; ' . $voltage . '; ' . $amperage . '; ' . $messageTxt . '<br />';
+
+		
+//		$db = new DbLayer();
+//		$db->update_msg($centralName, $centralId, $messageTypeId, $meesageDate, $moduleName, $moduleId, $power, $voltage, $amperage, $messageTxt);
 
 /*
 		switch($messageTypeId) {
@@ -86,11 +89,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$db = null;
 	}
 	else {
-		echo "Wrong API Key provided.";
+		echo " Wrong API Key provided. ";
 	}
 }
 else {
-    echo "No data posted with HTTP POST.";
+    echo " No data posted with HTTP POST. ";
 }
 
 function test_input($data) {

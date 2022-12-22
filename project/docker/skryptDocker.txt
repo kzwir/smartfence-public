@@ -2,3 +2,6 @@ docker network create -d bridge mysql-net
 
 // uruchomienie pliku yaml
 docker-compose up -d
+
+// kopiowanie pliku z host do docker
+$docker cp D:/temp/plot/php/src/php.ini 18a5393316ef:/usr/local/etc/php

@@ -1,6 +1,6 @@
 <?php
 require_once 'vendor/autoload.php';
-require_once 'httprequest.php';
+require_once 'httprequester.php';
 ?>
 
 <!DOCTYPE html>
@@ -86,7 +86,7 @@ table, th, td {
 </table>
 
 	<?php
-		const maxIdxMessage = 1000;
+		const maxIdxMessage = 1;
 		const  maxIdxCentralMcAddress = 10;
 		const maxIdxCentralName = 15;
 		const maxIdxModulMcAddress = 15;
@@ -164,12 +164,14 @@ table, th, td {
 				break;
 			}
 			// call populate_message($macAddressCentral, $nameCentral, $meesageType, $meesageDate, $nameModul, $macAddressModul, $power, $voltage, $amperage, $messageTxt);
-			echo $i+1 . ";     " . $macAddressCentral . "; " . $nameCentral . "; " .  $meesageType . "; " . $meesageDate . "; " . $nameModul . "; " . $macAddressModul . "; " . $power . "; " . $voltage . "; " . $amperage . "; " . $messageTxt . "<br>";
+			// echo $i+1 . ";     " . $macAddressCentral . "; " . $nameCentral . "; " .  $meesageType . "; " . $meesageDate . "; " . $nameModul . "; " . $macAddressModul . "; " . $power . "; " . $voltage . "; " . $amperage . "; " . $messageTxt . "<br>";
 
 			// sending http post message
-			$requestArr = array("centralisd" => $macAddressCentral, "centralname" => $nameCentral, "meesagetypeid" => $meesageType, "messagedate" => $meesageDate, "modulename" => $nameModul, "moduleid" => $macAddressModul, "power" => $power, "voltage" => $voltage, "amperage" => $amperage, "messagetxt" => $messageTxt);
-            $url        = "http://localhost/fence/fenceservice.php";
-            $this->assertEquals(HTTPRequester::HTTPPost($url, $requestArr), '[{"error":false}]');
+			$requestArr = ['apikey' => 'tPmAT5Ab3j7F9', 'cid' => $macAddressCentral, 'cname' => $nameCentral, 'msgtypeid' => $meesageType, 'msgdate' => $meesageDate, 'mname' => $nameModul, 'mid' => $macAddressModul, 'p' => $power, 'v' => $voltage, 'a' => $amperage, 'msgtxt' => $messageTxt];
+	
+			//$url = "http://localhost:8000/receiver/index.php";
+			$url = "http://10.10.0.144:8000/receiver/index.php";
+			$response = HTTPRequester::HTTPPost($url, $requestArr);
 		}
 	?>	
 </body>

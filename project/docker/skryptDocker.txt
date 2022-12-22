@@ -4,4 +4,10 @@ docker network create -d bridge mysql-net
 docker-compose up -d
 
 // kopiowanie pliku z host do docker
-$docker cp D:/temp/plot/php/src/php.ini 18a5393316ef:/usr/local/etc/php
+$docker cp D:/Projects/plot/smartfence/project/php/php.ini 5722873a55d7:/usr/local/etc/php
+
+// uruchomienie mysqli
+// docker run the image, and then install it from inside the container:
+docker-php-ext-install mysqli 
+docker-php-ext-enable mysqli
+apachectl restart

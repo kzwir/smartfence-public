@@ -8,7 +8,6 @@ volumes:
   phpmyadmin_data:
 
 services:
-
   mariadb:
     image: mariadb:10.4.8-bionic
     environment:

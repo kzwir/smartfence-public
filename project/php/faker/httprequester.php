@@ -69,14 +69,14 @@
             // Check if any error occurred
             if (empty($response)) {
                 // some kind of an error happened
-                die(curl_error($ch));
-                curl_close($ch); // close cURL handler
+                // die(curl_error($ch));
+                echo curl_error($ch);
             } else {
                 $info = curl_getinfo($ch);
-                curl_close($ch); // close cURL handler
             
                 if (empty($info['http_code'])) {
-                        die("No HTTP code was returned");
+                        // die("No HTTP code was returned");
+                        echo "No HTTP code was returned";
                 } else {
                     // load the HTTP codes
                     $http_codes = parse_ini_file("curlini.ini");

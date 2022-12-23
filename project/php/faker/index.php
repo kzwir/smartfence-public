@@ -86,7 +86,7 @@ table, th, td {
 </table>
 
 	<?php
-		const maxIdxMessage = 1;
+		const maxIdxMessage = 10;
 		const  maxIdxCentralMcAddress = 10;
 		const maxIdxCentralName = 15;
 		const maxIdxModulMcAddress = 15;
@@ -94,7 +94,7 @@ table, th, td {
 		const meesageType = 0;
 		$macAddressCentral = "";
 		$nameCentral = "";
-		$meesageDate;
+		$mesageDate;
 		$macAddressModul = "";
 		$nameModul = "";
 		$power = 0;
@@ -130,7 +130,7 @@ table, th, td {
 			$macAddressCentral = $faker->randomElement($a_centralMcAddress);
 			$nameCentral = $faker->randomElement($a_centralName);
 
-			$meesageDate = $faker->dateTime->format('Y/m/d/H/i/s');
+			$mesageDate = $faker->dateTime->format('Y/m/d/H/i/s');
 			$meesageType = $faker->randomElement(array ('1','A','B','C','D','E','F','G'));
 			
 			$macAddressModul = "";
@@ -163,11 +163,13 @@ table, th, td {
 					$nameModul = $faker->randomElement($a_modulName);
 				break;
 			}
-			// call populate_message($macAddressCentral, $nameCentral, $meesageType, $meesageDate, $nameModul, $macAddressModul, $power, $voltage, $amperage, $messageTxt);
-			// echo $i+1 . ";     " . $macAddressCentral . "; " . $nameCentral . "; " .  $meesageType . "; " . $meesageDate . "; " . $nameModul . "; " . $macAddressModul . "; " . $power . "; " . $voltage . "; " . $amperage . "; " . $messageTxt . "<br>";
+
+			// echo $i+1 . "; " . $macAddressCentral . ";<br/> " . $nameCentral . "; <br/>" .  $meesageType . "; <br/>" . $mesageDate . "; <br/>" . $nameModul . "; <br/>" . $macAddressModul . "; <br/>" . $power . "; <br/>" . $voltage . "; <br/>" . $amperage . "; <br/>" . $messageTxt . "<br/>";
+			// echo $macAddressCentral . ";<br/> " . $nameCentral . "; <br/>" .  $meesageType . "; <br/>" . $mesageDate . "; <br/>" . $nameModul . "; <br/>" . $macAddressModul . "; <br/>" . $power . "; <br/>" . $voltage . "; <br/>" . $amperage . "; <br/>" . $messageTxt . "<br/>";
+			echo $i+1 . "; " . $macAddressCentral . "; " . $nameCentral . "; " .  $meesageType . "; " . $mesageDate . "; " . $nameModul . "; " . $macAddressModul . "; " . $power . "; " . $voltage . "; " . $amperage . "; " . $messageTxt . "<br/>";
 
 			// sending http post message
-			$requestArr = ['apikey' => 'tPmAT5Ab3j7F9', 'cid' => $macAddressCentral, 'cname' => $nameCentral, 'msgtypeid' => $meesageType, 'msgdate' => $meesageDate, 'mname' => $nameModul, 'mid' => $macAddressModul, 'p' => $power, 'v' => $voltage, 'a' => $amperage, 'msgtxt' => $messageTxt];
+			$requestArr = ['apikey' => 'tPmAT5Ab3j7F9', 'cid' => $macAddressCentral, 'cname' => $nameCentral, 'msgtypeid' => $meesageType, 'msgdate' => $mesageDate, 'mname' => $nameModul, 'mid' => $macAddressModul, 'p' => $power, 'v' => $voltage, 'a' => $amperage, 'msgtxt' => $messageTxt];
 	
 			//$url = "http://localhost:8000/receiver/index.php";
 			$url = "http://10.10.0.144:8000/receiver/index.php";

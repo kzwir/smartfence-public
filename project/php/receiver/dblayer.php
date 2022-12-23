@@ -16,6 +16,10 @@ class DbLayer extends DatabaseSettings
 
     private $db_conn = null;
 
+    public static function getApi() {
+        return DatabaseSettings::APIKEY;
+    }
+
     /**
     * Łączy z bazą danych
     *

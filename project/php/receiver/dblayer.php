@@ -16,6 +16,8 @@ class DbLayer extends DatabaseSettings
 
     private $db_conn = null;
 
+    private $fp = null;
+
     public static function getApi() {
         return DatabaseSettings::APIKEY;
     }
@@ -29,21 +31,45 @@ class DbLayer extends DatabaseSettings
     * @return bool
     */
     final protected function conn() {
+//        if($this->fp)
+//            fwrite($this->fp, "funkcja conn() " . ";\r\n");
+
         // czy jesteśmy połączeni?
         if($this->connected) {
+//            if($this->fp)
+//                    fwrite($this->fp, "return true jestesmy polaczeni." . ";\r\n");
             return;
         } else {
             // nie, więc łączymy do SQL…
             try {
                 // Load settings from parent class
-                $settings = DatabaseSettings::getSettings();
-                $db_conn = new PDO('mysql:host='.$settings['dbhost'].';dbname='.$settings['dbname'].'', $settings['dbusername'], $settings['dbpassword']);
-                $db_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $settings = DatabaseSettings::getSettings();                
+                $host = $settings['dbhost'];
+                $dbName = $settings['dbname'];
+                $user = $settings['dbusername'];
+                $pass = $settings['dbpassword'];
+//                if($this->fp)
+//                    fwrite($this->fp, 'host: ' . $host . ' dbname: ' . $dbName . ' user: ' . $user . ' pswd: ' . $pass . ";\r\n");
+
+                $this->db_conn = new PDO("mysql:host={$host};dbname={$dbName}", $user, $pass);
+                $this->db_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->connected = true;
+
+                /*if($this->fp){
+                    if($this->connected){
+                        fwrite($this->fp, "connected true ;\r\n");
+                    }
+
+                    $sql = "SELECT count(*) FROM fence.message_type";
+                    $res = $this->db_conn->query($sql);
+                    $count = $res->fetchColumn();
+                    fwrite($this->fp, "polaczono z b.d. i odczytano: " .  $count  . " rekordów.\r\n");
+                }*/
             }
-            catch (PDOException $e) {
+            catch (Exception $e) {
                 print "Błąd w trakcie łączenia z b.d.: " . $e->getMessage() . "<br/>";
-                die();
+                if($this->fp)
+                    fwrite($this->fp, "Błąd w trakcie łączenia z b.d.: " . $e->getMessage() . ";\r\n");
             }
         }
     }
@@ -118,47 +144,88 @@ class DbLayer extends DatabaseSettings
     * @param string $query
     * @param string $centralName
     * @param int $centralId
-    * @param int $messageTypeId
-    * @param datetime $meesageDate
+    * @param int $msgTypeId
+    * @param datetime $msgDate
     * @param string $moduleName
     * @param int $moduleId
-    * @param decimal $power
+    * @param decimal $msgPower
     * @param decimal $voltage
     * @param decimal $amperage
-    * @param string $messageTxt;
+    * @param string $msgTxt;
     * @return bool
     */
-    public function update_msg($centralName, $centralId, $messageTypeId, $meesageDate, $moduleName, $moduleId, $power, $voltage, $amperage, $messageTxt) {
-        if(!$this->connected)
+    public function update_msg($centralName, $centralId, $msgTypeId, $msgDate, $moduleName, $moduleId, $msgPower, $voltage, $amperage, $msgTxt) {
+        $this->fp = fopen('zwirdblayer.txt', 'a');
+        date_default_timezone_set('Europe/Warsaw');
+        $date = date('Y/m/d h:i:s a ', time());
+        fwrite($this->fp, $date);
+
+        if(!$this->connected){
             $this->conn();
+        }
+
         try {
             // calling stored procedure command
-            $sql = 'CALL fence.populate_message(:p_centralId, :p_centralName, :p_messageTypeId, :p_messageDate, :p_moduleName, :p_moduleId, :p_power, :p_voltage, :p_amperage, :p_messageTxt';
+            $sql = 'CALL fence.populate_message(:p_centralId, :p_centralName, :p_msgTypeId, :p_msgDate, :p_moduleName, :p_moduleId, :p_power, :p_voltage, :p_amperage, :p_msgTxt)';
+
+            fwrite($this->fp, "parametry: " . $centralId . "; " . $centralName . "; " . $msgTypeId . "; " . $msgDate . "; " . $moduleName . "; " . $moduleId . "; " . $msgPower . "; " . $voltage . "; " . $amperage . "; " . $msgTxt . ";\r\n");
 
             // prepare for execution of the stored procedure
-            $stmt = $pdo->prepare($sql);
+//            if(!$this->db_conn)
+//                fwrite($this->fp, "db_conn false line 175" . ";\r\n");
 
-            // pass value to the command
-            $stmt->bindParam(':p_centralId', $centralId, PDO::PARAM_INT);
-            $stmt->bindParam(':p_centralName', $centralName, PDO::PARAM_INT);
-            $stmt->bindParam(':p_messageTypeId', $messageTypeId, PDO::PARAM_INT);
-            $stmt->bindParam(':p_messageDate', $meesageDate, PDO::PARAM_INT);
-            $stmt->bindParam(':p_moduleName', $moduleName, PDO::PARAM_INT);
-            $stmt->bindParam(':p_moduleId', $moduleId, PDO::PARAM_INT);
-            $stmt->bindParam(':p_power', $power, PDO::PARAM_INT);
-            $stmt->bindParam(':p_voltage', $voltage, PDO::PARAM_INT);
-            $stmt->bindParam(':p_amperage', $amperage, PDO::PARAM_INT);
-            $stmt->bindParam(':p_messageTxt', $messageTxt, PDO::PARAM_INT);
+            if($this->db_conn){
+                $stmt = $this->db_conn->prepare($sql);
+//                fwrite($this->fp, "po prepare line 179" . ";\r\n");
 
-            // execute the stored procedure
-            $stmt->execute();
+/* do testow
+                $centralName = 'quas';
+                $centralId = 'A6:8B:55:11:3E:BF';
+                $msgTypeId = '1';
+                $msgDate = '1996/03/02 03:00:49';
+                $moduleName = 'molestiae';
+                $moduleId = 'A6:8B:7C:DB:B6:34';
+                $msgPower = 1.1;
+                $voltage = 2.2;
+                $amperage = 3.3;
+                $msgTxt = '4.4';
+                fwrite($this->fp, "parametry: " . $centralId . "; " . $centralName . "; " . $msgTypeId . "; " . $msgDate . "; " . $moduleName . "; " . $moduleId . "; " . $msgPower . "; " . $voltage . "; " . $amperage . "; " . $msgTxt . ";\r\n");
+*/
+                // pass value to the command
+                $stmt->bindParam(':p_centralId', $centralId, PDO::PARAM_STR);
+                $stmt->bindParam(':p_centralName', $centralName, PDO::PARAM_STR);
+                $stmt->bindParam(':p_msgTypeId', $msgTypeId);
+                $stmt->bindParam(':p_msgDate', $msgDate);
+                $stmt->bindParam(':p_moduleName', $moduleName, PDO::PARAM_STR);
+                $stmt->bindParam(':p_moduleId', $moduleId, PDO::PARAM_STR);
+                $stmt->bindParam(':p_power', $msgPower);
+                $stmt->bindParam(':p_voltage', $voltage);
+                $stmt->bindParam(':p_amperage', $amperage);
+                $stmt->bindParam(':p_msgTxt', $msgTxt, PDO::PARAM_STR);
 
-            $stmt->closeCursor();
+//                fwrite($this->fp, "po bind params;\r\n");
+
+                // execute the stored procedure
+                $stmt->execute();
+
+//                fwrite($this->fp, "po execute;\r\n");
+
+                $stmt->closeCursor();
+
+//                fwrite($this->fp, "po closecursor;\r\n");
+            }
+            else {
+                fwrite($this->fp, "db_conn jest null." . ";\r\n");
+            }
         }
-        catch (PDOException $e) {
+        // catch (PDOException $e) {
+        catch (Exception $e) {
             print "Błąd update_proc_db: " . $e->getMessage() . "<br/>";
-            die();
+            fwrite($this->fp, "Błąd update_proc_db: " . $e->getMessage() . ";\r\n");
+            // die();
         }
+
+        fclose($this->fp);
     }
 
     /**

@@ -14,6 +14,7 @@ table, th, td {
 </head>
 <body>
 <?php
+/*
 	// The MySQL service named in the docker-compose.yml.
 	$host = 'mariadb';
 
@@ -29,7 +30,35 @@ table, th, td {
 		die("Connection failed: " . $conn->connect_error);
 	} else {
 		echo "Connected to MySQL server successfully!";
+	}*/
+
+/*
+	// The MySQL service named in the docker-compose.yml.
+	$host = 'mariadb';
+
+	$port = 8081; // 3306;
+
+	// Database use name
+	$user = 'admin';
+
+	//database user password
+	$pass = 'Fe8n!3ce#123';
+
+	$dbName = 'fence';
+
+	try {
+		// $db_conn = new PDO("mysql:host=mariadb;dbname=fence", 'admin', 'Fe8n!3ce#123');
+		$db_conn = new PDO("mysql:host={$host};dbname={$dbName}", $user, $pass);
+    	$db_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
+	catch (Exception $e) {
+		print "Błąd w trakcie łączenia z b.d.: " . $e->getMessage() . "<br/>";
+	}
+
+	$sql = "SELECT count(*) FROM fence.message_type";
+	$res = $db_conn->query($sql);
+	$count = $res->fetchColumn();
+	print "polaczono z b.d. i odczytano " .  $count  . " rekordów. ;<br/>";*/
 
 	$faker = new Faker\Generator();
 	$faker->addProvider(new Faker\Provider\Lorem($faker));
@@ -86,7 +115,7 @@ table, th, td {
 </table>
 
 	<?php
-		const maxIdxMessage = 10;
+		const maxIdxMessage = 1;
 		const  maxIdxCentralMcAddress = 10;
 		const maxIdxCentralName = 15;
 		const maxIdxModulMcAddress = 15;
@@ -130,7 +159,7 @@ table, th, td {
 			$macAddressCentral = $faker->randomElement($a_centralMcAddress);
 			$nameCentral = $faker->randomElement($a_centralName);
 
-			$mesageDate = $faker->dateTime->format('Y/m/d/H/i/s');
+			$mesageDate = $faker->dateTime->format('Y/m/d H:i:s');
 			$meesageType = $faker->randomElement(array ('1','A','B','C','D','E','F','G'));
 			
 			$macAddressModul = "";
@@ -174,6 +203,7 @@ table, th, td {
 			//$url = "http://localhost:8000/receiver/index.php";
 			$url = "http://10.10.0.144:8000/receiver/index.php";
 			$response = HTTPRequester::HTTPPost($url, $requestArr);
+			echo $response;
 		}
 	?>	
 </body>

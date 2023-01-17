@@ -7,7 +7,7 @@ Class DatabaseSettings {
 	{
 		// Database variables
 		// Host name
-		$settings['dbhost'] = 'localhost';
+		$settings['dbhost'] = 'mariadb'; // 'localhost'; // '127.0.0.1';
 		// Database name
 		$settings['dbname'] = 'fence';
 		// Username

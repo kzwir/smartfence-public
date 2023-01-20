@@ -193,15 +193,14 @@ table, th, td {
 				break;
 			}
 
-			// echo $i+1 . "; " . $macAddressCentral . ";<br/> " . $nameCentral . "; <br/>" .  $meesageType . "; <br/>" . $mesageDate . "; <br/>" . $nameModul . "; <br/>" . $macAddressModul . "; <br/>" . $power . "; <br/>" . $voltage . "; <br/>" . $amperage . "; <br/>" . $messageTxt . "<br/>";
-			// echo $macAddressCentral . ";<br/> " . $nameCentral . "; <br/>" .  $meesageType . "; <br/>" . $mesageDate . "; <br/>" . $nameModul . "; <br/>" . $macAddressModul . "; <br/>" . $power . "; <br/>" . $voltage . "; <br/>" . $amperage . "; <br/>" . $messageTxt . "<br/>";
 			echo $i+1 . "; " . $macAddressCentral . "; " . $nameCentral . "; " .  $meesageType . "; " . $mesageDate . "; " . $nameModul . "; " . $macAddressModul . "; " . $power . "; " . $voltage . "; " . $amperage . "; " . $messageTxt . "<br/>";
 
 			// sending http post message
 			$requestArr = ['apikey' => 'tPmAT5Ab3j7F9', 'cid' => $macAddressCentral, 'cname' => $nameCentral, 'msgtypeid' => $meesageType, 'msgdate' => $mesageDate, 'mname' => $nameModul, 'mid' => $macAddressModul, 'p' => $power, 'v' => $voltage, 'a' => $amperage, 'msgtxt' => $messageTxt];
 	
 			//$url = "http://localhost:8000/receiver/index.php";
-			$url = "http://10.10.0.144:8000/receiver/index.php";
+			//$url = "http://10.10.0.144:8000/receiver/index.php";
+			$url = "http://51.75.252.91/recfence.php";
 			$response = HTTPRequester::HTTPPost($url, $requestArr);
 			echo $response;
 		}

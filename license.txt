@@ -3,7 +3,7 @@ Business Source License 1.1
 
 Licensor: Krzysztof Żwirek
 Licensed Work: smartfence-public
-Change Date: 2059-01-01
+Change Date: 2031-01-01
 Change License: GPL-3.0-or-later
 
 Usage Grant: You may use, modify, and redistribute this Work for non-production, non-commercial purposes (evaluation, testing, research, education). Production or commercial use requires a separate commercial agreement with the Licensor.

@@ -1,0 +1,5 @@
+NOTICE
+This repository is licensed under Business Source License 1.1.
+Production/commercial use requires a commercial license from Krzysztof Żwirek.
+Third-party components (Docker, MariaDB, PHP) are under their respective licenses.
+No usage in critical safety systems without explicit warranties.
